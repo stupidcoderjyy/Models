@@ -1,0 +1,32 @@
+$mission: {
+    id: "0.3",
+    name: "程序设计",
+    desc: """
+        程序模型描述数据和数据之间的转化关系，本任务的目标是确定程序模型并部署后续开发任务。
+        对于GUI项目，可视化部分只关心组件内部的数据和程序其他部分如何交互。
+    """,
+    procedure: @designProgramme,
+    namesMapper: {
+         "Data": "数据",
+         "Connection": "关系"
+    }
+}
+
+Data: {
+    Name
+}
+
+Connection: {
+    Name,
+    Input: Data,
+    Output: Data
+}
+
+designProgramme: void -> list<Connection> {
+    step("要素设计", "使用要素描述语言，描述程序中涉及到的要素");
+    step("列举行为", "定义所有要素的行为");
+    for (string s : strings("要素行为")) {
+        step("行为设计", "使用要素描述语言，给出行为的实现");
+    }
+    finish();
+}

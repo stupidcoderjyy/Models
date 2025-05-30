@@ -1,0 +1,26 @@
+$mission: {
+    id: "b",
+    name: "程序开发",
+    desc: "",
+    procedure: "procedure",
+    namesMapper: {
+         "Data": "数据",
+         "Connection": "关系"
+    }
+}
+
+ProjectType: enum<Gui, Console>
+
+developProgramme: void -> void {
+    type = enum(ProjectType, "确定项目类型");
+    switch(type) {
+        case Gui: {
+            mission("0.3");
+            mission("0.4");
+        }
+        case Console: {
+            mission("0.3");
+        }
+    }
+    finish();
+}

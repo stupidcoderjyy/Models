@@ -1,0 +1,31 @@
+Subject:
+    Name: string,
+    Models: list<
+        Model:
+            ModelId: int,
+            Items: list<
+                ModelItem:
+                    ItemId: int,
+                    State: enum<Waiting, Reviewing, Finished>
+            >
+    >,
+    itemFromId: ItemId -> ModelItem {
+        return Models[Id >> 8].Items[Id & 0xFF]
+    }
+
+Pool:
+    PoolId: int,
+    list<Id: int>
+
+Manager:
+    Subjects: list<Subject>,
+    Pools: list<Pool>,
+    //存放无法加入Pools的新条目
+    Queue: list<ItemId>
+    //下一个复习的条目
+    NextItem: ItemId,
+    registerSubject: Subject -> Subjects,
+    //将新的条目加入复习队列
+    enqueue: ItemId -> (Queue, Pools, NextItem),
+    //完成当前条目的复习
+    finish: Pass: bool -> (Queue, Pools, NextItem, State)
