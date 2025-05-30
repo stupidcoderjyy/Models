@@ -5,12 +5,15 @@ Source: map<
 >
 
 @Mission("情报处理", "根据录音、ppt上的重点等情报，建立分析索引和分析任务")
-void -> void:
-    Task.step("录音转文字")
-    Task.step("文本分块")
-    from 1 to Task.int("文本块数量"):
-        Task.step("AI生成大纲")
-    Task.step("创建分析任务")
+void -> void {
+    step("录音转文字");
+    step("文本分块");
+    from 1 to int("文本块数量") {
+        step("AI生成大纲");
+    }
+    step("创建分析任务");
+    finish;
+}
 
 /**
 

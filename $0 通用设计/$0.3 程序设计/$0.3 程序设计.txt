@@ -1,0 +1,25 @@
+@Element("数据")
+Data: Name
+
+@Element("关系")
+Connection:
+    Name,
+    Input: Data,
+    Output: Data
+
+@Mission("$0.3", "程序设计", """
+    程序模型描述数据和数据之间的转化关系，本任务的目标是确定程序模型并部署后续开发任务。
+    对于GUI项目，可视化部分只关心组件内部的数据和程序其他部分如何交互。
+""")
+void -> <Connection> {
+    step;
+    finish;
+}
+
+Subject:
+    name: string,
+    models: list<
+        id: int,
+        itemCount: int
+    >
+
