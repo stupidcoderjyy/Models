@@ -1,0 +1,57 @@
+@Element("习题集")
+Source: map<Pos, Issue>
+
+@Element("注册表")
+RegisterTable: map<
+    IssueId,
+    State: enum<"计划","待分析","已完成">,
+    Pos
+>
+
+@Element("题库")
+ProcessRecord: map<
+    IssueId,
+    Marks: list<enum<"M","T">>,
+    ProcessChain
+>
+
+@Element("决策模型")
+DecisionModel: map<
+    IssueType,
+    DecisionTree: map<Strategy, DecisionChain>
+>
+
+@Element("特征链集")
+FeatureChainSet: map<IssueId, FeatureChain>
+
+@Project("考研数学I")
+void -> ProcessRecord, DecisionModel:
+    from i = 1 to 7:
+        Task.mission("$a." + i)
+
+@Mission(0, "习题注册")
+void -> Source, RegisterTable:
+    Task.step(Source.count, '将习题集中的所有习题，加入注册表中，标记"计划"')
+
+@Mission(1, "习题推导")
+Source, RegisterTable, DecisionModel -> ProcessRecord:
+    Workflow.init()
+    from 1 to Task.int(RegisterTable, "'待分析'习题数量"):
+        Workflow.newTurn()
+        Task.step(ProcessRecord, 1"推导习题")
+        if Task.bool(DecisionModel, "是否存在该习题的决策链"):
+            Task.step(RegisterTable, "标记'M'")
+        if Task.bool("是否出现翻译错误"):
+            Task.step(RegisterTable, "标记'T'")
+        if Workflow.time() > 15:
+            Workflow.endTurn()
+
+@Mission(3, "构造特征链集")
+ProcessRecord -> FeatureChainSet:
+    from 1 to Task.int(RegisterTable, "'待分析'且标记'M'的习题数量"):
+        Task.step(ProcessRecord, "删除推导链中已知模型连接，加入特征链集")
+
+@Mission(4, "构建决策模型")
+DecisionModel, FeatureChainSet -> DecisionModel:
+    Task.step(FeatureChainSet, "归纳关键环节", "根据特征链中的结果要素，对所有题目进行分组")
+    Task.step(FeatureChainSet, "模型分析", "在已有决策树的基础上，合并特征链使得决策树能够推导出所有特征链")

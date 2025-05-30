@@ -1,0 +1,16 @@
+@Element("模型")
+Model: map<
+    ModelIndex,
+    map<ReviewIndex, ReviewItem, ModelItem>
+>
+
+@Element("素材", "一系列")
+Source: map<
+    SourceIndex,
+    list<SourceItem>
+>
+
+
+@Mission("模型分析")
+Source -> Model:
+    
