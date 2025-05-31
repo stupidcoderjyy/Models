@@ -1,21 +1,37 @@
-Subject:
+Subject: {
+    Id: string
     Name: string,
     Models: list<
-        Model:
+        Model: {
             ModelId: int,
             Items: list<
                 ModelItem:
                     ItemId: int,
                     State: enum<Waiting, Reviewing, Finished>
             >
+        }
     >,
     itemFromId: ItemId -> ModelItem {
         return Models[Id >> 8].Items[Id & 0xFF]
     }
+}
 
 Pool:
     PoolId: int,
     list<Id: int>
+
+Records: map<
+    Subject.Id,
+    Record: {
+        StartTime: time,
+        list<
+            RecordItem: {
+                ItemId,
+                TimeCost: time
+            }
+        >
+    }
+>
 
 Manager:
     Subjects: list<Subject>,
@@ -25,7 +41,16 @@ Manager:
     //下一个复习的条目
     NextItem: ItemId,
     registerSubject: Subject -> Subjects,
-    //将新的条目加入复习队列
     enqueue: ItemId -> (Queue, Pools, NextItem),
-    //完成当前条目的复习
     finish: Pass: bool -> (Queue, Pools, NextItem, State)
+
+addSubject: (Id: string, Name: string, items: int[]) -> Subject;
+
+//将新的条目加入复习队列
+enqueue: ItemId -> (Queue, Pools, NextItem);
+
+//开始下一个条目的复习
+startReview: Manager -> ItemId;
+
+//完成当前条目的复习
+finishReview: (Manager, Pass: bool) -> void;

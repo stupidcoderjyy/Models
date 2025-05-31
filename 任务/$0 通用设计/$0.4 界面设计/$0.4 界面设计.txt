@@ -1,0 +1,29 @@
+$mission: {
+    id: "0.4",
+    name: "界面设计",
+    desc: """
+        根据程序模型中的行为，设计对应的组件。此任务应当置于$0.3之后
+    """,
+    procedure: designProgramme,
+    namesMapper: {
+         "Data": "数据",
+         "Connection": "关系"
+    }
+};
+
+UIModel: map<
+    Widget,
+    Data: {
+        Name: string
+    }
+>;
+
+import ProgrammeModel from "0.3";
+
+designProgramme: ProgrammeModel -> UIModel {
+    behaviors = take(project.id + ".behaviors", list<string>);
+    for (string s : behaviors) {
+        step("组件设计: " + s, "根据行为设计组件");
+    }
+    finish();
+};
