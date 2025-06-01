@@ -1,0 +1,51 @@
+script: {
+    register($Mission, mission)
+}
+
+mission: {
+    id: "1.0",
+    name: "Gui程序开发",
+    procedure: guiAppDevelopment,
+    desc: "根据UI和程序模型，编写Gui应用程序"
+}
+
+UIModel: map<
+    Widget,
+    Data: {
+        Name: string
+    }
+>
+
+ProgrammeModel: list<
+    Connection: {
+        Name,
+        Input: Data,
+        Output: Data
+    }
+>
+
+Module: {
+    Input,
+    Output,
+    Process
+}
+
+Programme: list<
+    Modules: list<Module>,
+    Connections: list<
+        Connection: {
+            A: Module,
+            B: Module,
+            Link
+        }
+    >
+>
+
+guiAppDevelopment: UIModel, ProgrammeModel -> Programme {
+    while ((next = string("下一个需要实现的模块")) != "") {
+        step("实现模块", next);
+    }
+    while ((next = string("下一个需要实现的连接")) != "") {
+        step("实现连接", next);
+    }
+}

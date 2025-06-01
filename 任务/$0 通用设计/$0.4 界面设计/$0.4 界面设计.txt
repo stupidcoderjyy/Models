@@ -9,16 +9,22 @@ $mission: {
          "Data": "数据",
          "Connection": "关系"
     }
-};
+}
 
 UIModel: map<
     Widget,
     Data: {
         Name: string
     }
->;
+>
 
-import ProgrammeModel from "0.3";
+ProgrammeModel: list<
+    Connection: {
+        Name,
+        Input: Data,
+        Output: Data
+    }
+>
 
 designProgramme: ProgrammeModel -> UIModel {
     behaviors = take(project.id + ".behaviors", list<string>);
@@ -26,4 +32,4 @@ designProgramme: ProgrammeModel -> UIModel {
         step("组件设计: " + s, "根据行为设计组件");
     }
     finish();
-};
+}
