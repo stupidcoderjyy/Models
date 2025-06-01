@@ -31,5 +31,4 @@ designProgramme: ProgrammeModel -> UIModel {
     for (string s : behaviors) {
         step("组件设计: " + s, "根据行为设计组件");
     }
-    finish();
-}
+};

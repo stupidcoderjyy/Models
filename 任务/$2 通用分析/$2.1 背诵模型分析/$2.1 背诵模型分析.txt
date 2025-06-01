@@ -1,0 +1,48 @@
+$script: {
+    register(Mission, mission)
+}
+
+mission: {
+    id: "2.1",
+    name: "模型分析(背诵)",
+    desc: """
+        根据分析索引，获得需要背诵的内容，同时建立复习索引
+    """,
+    procedure: reciteModelAnalysis
+};
+
+//素材
+Source: map<
+    SourceIndex: string,
+    SourceContent: list<string>
+>
+
+//模型库
+ModelStorage: list<
+    Model: {
+        Id: int,
+        Name: string,
+        map<
+            ModelKey: string,
+            ModelValue: string
+        >
+    }
+>
+
+//复习索引库
+ReviewItemStorage: map<
+    ModelIndex: int,
+    map<
+        ItemId: int,
+        ModelKey: string
+    >
+>
+
+reciteModelAnalysis: Source -> Models {
+    j = input(int, "分析索引数量");
+    for (i = 1; i <= j; i++) {
+        s = "[" + i + "/" + j + "]";
+        step("从素材查找索引内容" + s);
+        step("模型封装，建立复习索引" + s);
+    }
+}
